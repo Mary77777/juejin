@@ -1,0 +1,30 @@
+@import '@/qunar/reset.scss';
+  .content {
+    .title {
+      h1 {
+        @include rect(3.8rem, auto);
+        @include padding(0 .1rem .1rem .1rem);
+      }
+    }
+    .mycenter {
+      @include rect(4rem, auto);
+      .myfirstimg {
+        @include rect(4rem, auto);
+      }
+    }
+    .myfooter {
+      @include padding(.15rem 0);
+      p {
+        @include margin(.2rem .1rem 0 .1rem);
+        @include rect(3rem, auto);
+      }
+      span {
+        @include rect(2rem, auto);
+      }
+      b {
+        @include rect(3rem, auto);
+      }
+
+    }
+  }
+

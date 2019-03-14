@@ -1,0 +1,55 @@
+@import '@/qunar/reset.scss';
+  .content {
+    @include rect(4rem, auto);
+    float: left;
+    ul {
+      li {
+        @include padding(.15rem 0);
+        @include margin(.2rem 0);
+        // border-bottom: .015rem solid #eee;
+        .photo {
+          @include rect(3.7rem, auto);
+          img {
+            @include rect(3.75rem, auto);
+            // border-bottom: .01rem solid #eee;
+          }
+        }
+        .all {
+          p {
+            font-size: .15rem;
+            font-weight: 700;
+            @include padding(.2rem .05rem 0 .1rem);
+            color: #000;
+          }
+          h5 {
+            @include padding(.05rem 0);
+            @include padding(.07rem 0 .1rem .13rem);
+            font-weight: 200;
+            color: #000;
+            .data {
+              @include rect(.14rem, auto);
+
+            }
+          }
+          h6 {
+            @include padding(0 .1rem 0 .1rem);
+            font-weight: 200;
+            color: #000;
+            .map {
+              @include rect(.15rem, auto);
+            }
+          }
+          span {
+            float: right;
+            // border: 1px solid #eee;
+            background: #4d91fd;
+            font-weight: 200;
+            color: #fff;
+            border-radius: .1rem;
+            text-align: center;
+            @include rect(1rem, auto);
+          }
+        }
+      }
+    }
+  }

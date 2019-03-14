@@ -1,0 +1,242 @@
+1、关于代理
+  1.package.json中添加如下代码
+    "proxy": "https://www.daxunxun.com"
+
+    // 组件中可以通过  /douban就可以访问到数据了
+    api/index.js做出如下调整
+    let baseUrl = ''
+
+    process.env.NODE_ENV === 'development' ? baseUrl = '' : baseUrl = 'https://www.daxunxun.com'
+
+    export default baseUrl
+  
+  2. 服务器设置  ---  前端压根不会有跨域问题 --- 后台肯听你的吗？
+    express生成的代码的app.js中添加如下代码
+      app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+      });
+
+  3、自己配置代理   ----  适合一个项目需要多项代理时使用
+    src文件夹下创建setupProxy.js
+    cnpm i http-proxy-middleware -D
+
+    编辑代码   ---- 这个文件不需要在任何抵挡引入，当你运行npm run start时，会自动生效
+      const proxy = require("http-proxy-middleware");
+ 
+      module.exports = function(app) {
+        app.use(
+          proxy("/daxun", {
+            target: "https://www.daxunxun.com",
+            changeOrigin: true,
+            pathRewrite: { // 自己配置代理必须加这句话
+              '^/daxun': ''
+            }
+          })
+        );
+      };
+      api/index.js处打开baseUrl
+      process.env.NODE_ENV === 'development' ? baseUrl = '/daxun' : baseUrl = 'https://www.daxunxun.com'
+    可能出现的错误 Hostname/IP doesn't match certificate's altnames
+      https://www.jianshu.com/p/6b0a4429f30e
+2、使用react实现登录功能
+  InputItem模块  样式出问题,index.js处引入css样式
+  import 'antd-mobile/dist/antd-mobile.css'; 
+  注意按钮的颜色和是否可以点击的效果的实现
+  注意点击登录时的传值问题
+3、react的状态管理器
+  组件传值
+    vue --- vuex     ----  全家桶交由官方维护
+    react --- 不唯一  ---- react只负责提供核心库，全家桶很多东西交由社区维护
+      redux + react-redux + redux-thunk
+      redux  -----  最基本的  必须得掌握的
+      react-redux  ----  组件更加优化
+      redux-thunk  ----  异步操作
+4、redux
+  https://www.redux.org.cn/
+  Redux 是 JavaScript 状态容器，提供可预测化的状态管理
+  ???? redux是只能用在react中吗？ 不是
+  facebook之前推出了一个状态管理器 flux
+    flux https://www.cnblogs.com/fliu/articles/5245923.html
+      用户访问 View
+      View 发出用户的 Action
+      Dispatcher 收到 Action，要求 Store 进行相应的更新
+      Store 更新后，发出一个"change"事件
+      View 收到"change"事件后，更新页面
+    redux
+      应用中所有的 state 都以一个对象树的形式储存在一个单一的 store 中。 
+      惟一改变 state 的办法是触发 action，一个描述发生什么的对象。 为了描述 action 如何改变 state 树，你需要编写 reducers。
+  1、安装依赖
+    cnpm i redux react-redux redux-thunk -S
+  2、src/store/index.js 
+      import { createStore, combineReducers } from 'redux'
+      import homeStore from './home/store'
+
+      // combineReducers 可以用来组合各个分reducer
+      const reducer = combineReducers({
+        homeStore
+      })
+
+      const store = createStore(reducer);
+
+      export default store;
+
+
+    src/store/home/store.js
+
+      2.1 定义一个最基本的reducer ---- 包含初始化的状态state和处理改变你的数据action
+       // const reducer = (state = {}, action) => {}
+        当 state 变化时需要返回全新的对象，而不是修改传入的参数。
+
+        // 纯函数 --- 没有随机数，---- 输入确定输出一定确定
+        const reducer = (state = {
+          list: [],
+          bannerdata: []
+        }, action) => {
+          const { type, data } = action; // type表示你要做的事行为，data就是传递过来的数据
+          switch (type) {
+            // 当 state 变化时需要返回全新的对象，而不是修改传入的参数。
+            case 'CHANGE_BANNER_DATA':
+              
+              return {
+                list: state.list,
+                bannerdata: data
+              }
+             // break;
+            case 'CHANGE_LIST_DATA':
+              return {
+                list: data,
+                bannerdata: state.bannerdata
+              }
+             // break;
+            default:
+              return state;
+             // break;
+          }
+        }
+
+        export default reducer;
+    2.2 src/index.js入口文件处做调整
+      import store from './store';
+      function renderFn () { // 
+        ReactDOM.render(
+          <Router>
+            <Switch>
+              <Route path="/detail" component = { DetailApp } />
+              <Route path="/userapp" component = { UserApp} />
+              <Route path="/" component = { App } />
+            </Switch>
+          </Router>,
+          document.getElementById('root'));
+      }
+      renderFn();
+
+      // 可以手动订阅更新，也可以事件绑定到视图层。
+      store.subscribe(renderFn)
+    2.3 pages/Home.        jsx处  取状态管理器中的数据  以及 触发状态管理器  中的只发生改变
+      取数据 store.getState() ---- {}
+      触发   store.dispatch({type: '', data: data})
+
+      请求数据成功之后执行 ---- componentDidMount ()
+        store.dispatch({type: 'CHANGE_LIST_DATA', data})
+        store.dispatch({type: 'CHANGE_BANNER_DATA', data})
+      render函数内渲染数据通过 store.getState().homeStore.bannerdata
+                          和 store.getState().homeStore.list   获取  ------ 效果看Home.1.jsx
+    2.4 感觉好像可以了，但是还是差一点 ----- 组件内部还有异步操作？
+5、redux + redux-thunk
+  5.1 store/index.js ---- 添加中间件
+    import { createStore, combineReducers, applyMiddleware } from 'redux'
+    import thunk from 'redux-thunk';
+
+    const store = createStore(reducer, applyMiddleware(thunk));
+  
+  5.2 store/home/action.js
+    // const requestData = () => {
+    //   return (dispatch, getState) => {
+    //   }
+    // }
+    const requestData = () => (dispatch, getState) => {
+      api.requestData().then(data => {
+        dispatch({type: 'CHANGE_LIST_DATA', data})
+      })
+    }
+    const requestBannerData = () => (dispatch, getState) => {
+      api.requestBannerData().then(data => {
+        dispatch({type: 'CHANGE_BANNER_DATA', data})
+      })
+    }
+    export default { requestData,  requestBannerData };
+  5.3 Home.jsx组件处钩子函数触发action即可
+    import action from '@/store/home/action'
+   componentDidMount () {
+      // console.log(action)
+      store.dispatch(action.requestData())
+      store.dispatch(action.requestBannerData())
+    }
+6、react-redux
+  http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_three_react-redux.html
+  UI 组件负责 UI 的呈现，容器组件负责管理数据和逻辑。
+  所有的 UI 组件都由用户提供，容器组件则是由 React-Redux 自动生成。也就是说，用户负责视觉层，状态管理则是全部交给它。
+  6.1 改造src/index.js的入口文件，使用Provider组件包裹Router
+    import { Provider } from 'react-redux';
+    ReactDOM.render(
+      <Provider store = { store }>
+        <Router>
+          <Switch>
+            <Route path="/detail" component = { DetailApp } />
+            <Route path="/userapp" component = { UserApp} />
+            <Route path="/" component = { App } />
+          </Switch>
+        </Router>
+      </Provider>,
+      document.getElementById('root')
+    );
+  6.2 将组件拆分成两个 Home.jsx  HomeUI.jsx
+    Home.jsx 容器组件   HomeUI.jsx UI组件
+  
+  6.3 Home.jsx 容器组件
+    import { connect } from 'react-redux';
+    import UI from './HomeUI';
+    import action from '@/store/home/action'
+    const mapStateToProps = (state) => {
+      return {
+        list: state.homeStore.list,
+        bannerdata: state.homeStore.bannerdata
+      }
+    }
+
+    const mapDispathToProps = (dispatch) => {
+      return {
+        requestData () {
+          dispatch(action.requestData())
+        },
+        requestBannerData () {
+          dispatch(action.requestBannerData())
+        }
+      }
+    }
+
+    const Home = connect(
+      mapStateToProps,
+      mapDispathToProps
+    )(UI);
+
+    export default Home;
+  6.4 HomeUI.jsx UI组件 
+    把之前的store.getState().homeStore全部替换为this.props
+    把之前componentDidMount钩子函数中直接使用this.props调用容器组件提供的方法
+    componentDidMount () {
+      console.log(this.props)
+      this.props.requestData();
+      this.props.requestBannerData();
+    }
+7、改造Kind.jsx
+  KindUI.jsx 将store.getState().homeStore全部替换为this.props
+  Kind.jsx 组件内只需要写mapStateToProps即可
+8、异步操作
+  redux-thunk
+  redux-saga (先学习generator：http://es6.ruanyifeng.com/#docs/generator)
+  redux-promise
+9、mobx
+  https://cn.mobx.js.org/

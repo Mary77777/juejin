@@ -1,0 +1,46 @@
+@import '@/qunar/reset.scss';
+.content {
+  @include rect(100%, 100%);
+  // @include flexbox();
+  @include padding(.01rem 0 0 0);
+  h1 {
+    @include padding(.2rem);
+    float: left;
+    @include color(#0e0e0e);
+    @include rect(3.6rem, auto);
+  }
+  ul {
+    
+    .list {
+      @include rect(100%, auto);
+       @include padding(.2rem .1rem);
+      .img {
+        @include padding(0 0 0 .2rem);
+        .logo {
+          @include rect(.75rem, .75rem);
+          margin-top: -.45rem;
+          border-radius: .15rem;
+          
+        }
+        @include display(inline-block);
+      }
+      .introduce {
+        @include display(inline-block);
+        @include rect(2rem, auto);
+        @include padding(0.05rem .5rem 0 .2rem);
+        h2 {
+          @include color(#2e3135);
+          @include padding(0 0 .05rem 0);
+
+        }
+        span {
+          @include color(#8a9aa9);
+          @include padding(.05rem 0);
+        }
+        p { 
+          @include color(#37c701);
+        }
+      }
+    }
+  }
+}

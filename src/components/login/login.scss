@@ -1,0 +1,58 @@
+@import '@/qunar/reset.scss';
+.center {
+   background: #108EE9;
+  @include rect(100%, 100%);
+  .itemimg {
+    @include rect(3.8rem, auto);
+    img {
+      @include rect(.7rem, .6rem);
+      background: #fff;
+      border-radius: .15rem;
+      margin:.5rem 0 .5rem 1.5rem;
+    }
+  }
+  .myinput {
+    width: 3.4rem;
+    @include margin( 0 0 0 .17rem);
+  }
+  .btu {
+    background: #006CD9;
+    width: 3.4rem;
+    @include margin( .2rem 0 .2rem .17rem);
+  }
+  p {
+    @include margin(.2rem 0 .2rem .2rem);
+      .aleft {
+        @include rect(1rem, auto);
+        color: #fff;
+
+      }
+      .aright {
+        @include rect(1rem, auto);
+        color: #fff;
+        @include padding(0 0 0 2.2rem);
+      }
+    //}
+    ul {
+      width:3rem;
+      background: #108EE9;
+      @include flexbox();
+      @include justify-content(butten);
+      @include margin(.2rem 0);
+      li {
+        @include rect(.5rem, auto);
+        @include flexbox();
+        background: #108EE9;
+        img {
+          @include rect(.4rem, .4rem);
+        }
+      }
+      .cen {
+        @include margin(0 1rem);
+      }
+    }
+  }
+
+
+}
+

@@ -1,0 +1,10 @@
+@import '@/qunar/reset.scss';
+  .content {
+    .login {
+      margin: .2rem 0;
+    }
+    .de {
+      @include margin(.1rem 0);
+    }
+  }
+

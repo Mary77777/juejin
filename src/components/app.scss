@@ -1,0 +1,25 @@
+@import '@/qunar/reset.scss';
+.box {
+  .header {
+   .left {
+     @include padding(0 1.4rem 0 0);
+     img {
+       @include padding(0 .2rem 0 0);
+     }
+     .selectStyle {
+        border: 0;
+        color: #4c91fd;
+        vertical-align: middle;
+        option {
+          border: 0;
+          padding:1rem; 
+        }
+     }
+   }
+   .right {
+     a {
+       color:#4c91fd;
+     }
+   }
+}
+}

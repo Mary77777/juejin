@@ -1,0 +1,97 @@
+@import '@/qunar/reset.scss';
+ul {
+  background: #fff;
+  li {
+    .hea {
+      @include rect(3.75rem, auto);
+      .left {
+        @include rect(3.8rem, auto);
+        @include flexbox();
+        .tx {
+          @include rect(.5rem, .5rem);
+          border-radius: .4rem;
+        }
+        .name {
+        @include padding( 0 0 0 .15rem);
+        @include rect(2.5rem, auto);
+          b {
+            color: #000;
+          }
+          .ti{
+            span{
+              color: #ccc;
+            }
+            i {
+              color: #ccc;
+            }
+          }
+        }
+      }
+      .right {
+        @include margin(.1rem 0 0 0);
+        @include rect(.6rem, .25rem);
+        border: .01rem solid #6CBD45;
+        @include text-align();
+        font: 14px/.25rem '';
+      }
+    }
+    .cont {
+      p {
+        @include rect(auto, auto);
+        @include padding(.1rem 0 .1rem .07rem);
+        color: #000;
+      }
+      .con {
+        @include rect(1.5rem, auto);
+        @include padding( 0 0 0 .1rem);
+
+      }
+    }
+    .foo {
+      //@include padding(.2rem 0);
+      @include margin(.2rem 0 0 0);
+      border: .01rem solid #eee;
+      @include flexbox();
+      @include rect(3.55rem, .4rem);
+      .praise {
+        @include rect(1.75rem, .5rem);
+        @include text-align();
+        @include padding(.05rem 0 0 0);
+        color: #7D8591;
+        .zan {
+          @include rect(.25rem, .25rem);
+        }
+      }
+      .speak {
+        @include rect(1.75rem, .5rem);
+        @include text-align();
+        @include padding(.05rem 0 0 0);
+        color: #7D8591;
+        //@include padding(.1rem 0 0 0);
+        .xx {
+          @include rect(.25rem, .25rem);
+        }
+      }
+    }
+    .tet {
+      //display: none;
+      .textarea {
+        @include rect(3.6rem, auto);
+        //@include margin(.2rem 0);
+        @include margin(.1rem 0);
+      }
+      .sub {
+        @include rect(.7rem, .45rem);
+        margin-left: 78%;
+        background: #eee;
+        border: .01rem solid #eee;
+        color: #000;
+        border-radius: .1rem;
+        text-align: center;
+        line-height: .4rem;
+
+      }
+    }
+  }
+}
+
